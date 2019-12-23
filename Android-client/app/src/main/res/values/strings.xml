@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LiveSensor</string>
+    <string name="default_port">9000</string>
+    <string name="run">Run</string>
+    <string name="port_text_hint"><font size="11">Port number</font></string>
+    <string name="ip_text_hint"><font size="11">IP address</font></string>
+    <string name="connect">Connect</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
+
+</resources>

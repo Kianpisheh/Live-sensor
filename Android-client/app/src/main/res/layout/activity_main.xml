@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:gravity="center"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="@string/ip_text_hint"
+            style="@style/Widget.AppCompat.EditText"
+            android:id="@+id/ip_edit_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="30dp"
+            android:textAlignment="center"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:hint="@string/port_text_hint"
+            style="@style/Widget.AppCompat.EditText"
+            android:id="@+id/port_edit_text"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:inputType="numberSigned"
+            android:layout_marginBottom="30dp"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/connection_sw"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:scaleX="2"
+        android:scaleY="2"
+        style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+        android:layout_marginTop="40dp"/>
+
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:id="@+id/conn_status_tv"
+        android:text="@string/disconnected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

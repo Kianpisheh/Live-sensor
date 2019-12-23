@@ -3,26 +3,44 @@ const http = require("http");
 const socketIo = require("socket.io");
 
 //Port from environment variable or default - 4001
-const port = process.env.PORT || 9000;
+const port = 9000;
 
 //Setting up express and adding socketIo middleware
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+var clients = {};
+
+var num = 0;
+
 //Setting up a socket with the namespace "connection" for new sockets
-io.on("connection", socket => {
-  console.log("The android device is connected");
+var android_nsp = io.of("/android-app");
+android_nsp.on("connection", socket => {
+  console.log("the Android client connected");
 
   //Here we listen on a new namespace called "incoming data"
-  socket.on("incoming data", data => {
-    //Here we broadcast it out to all other sockets EXCLUDING the socket which sent us the data
-    socket.broadcast.emit("outgoing data", { num: data });
+  socket.on("sensor_data_for_server", data => {
+    if (clients["web"]) {
+      num += 1;
+      if (num % 100 === 0) {
+        console.log(num);
+      }
+      clients["web"].emit("sensor_data_for_web_client", data);
+    }
   });
 
   //A special namespace "disconnect" for when a client disconnects
-  socket.on("disconnect", () => console.log("Client disconnected"));
-  socket.emit("sensor request", "acc", "start");
+  socket.on("disconnect", () => console.log("the Android client disconnected"));
+  clients["anroid"] = socket;
+  clients["anroid"].emit("sensor request", "acc", "start");
+});
+
+var web_nsp = io.of("/web-app");
+web_nsp.on("connection", socket => {
+  console.log("the web client connected");
+  socket.on("disconnect", () => console.log("the web client disconnected"));
+  clients["web"] = socket;
 });
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

@@ -46,7 +46,7 @@ public class SocketThread extends Thread implements SensorEventListener {
     public void run() {
         try {
             System.out.println("http://"+ serverAddress + ":" + serverPort);
-            mSocket = IO.socket("http://"+ serverAddress + ":" + serverPort);
+            mSocket = IO.socket("http://"+ serverAddress + ":" + serverPort + "/android-app");
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
             Log.e(TAG, "IO.Socket(): Error in creating the client socket");
@@ -122,7 +122,8 @@ public class SocketThread extends Thread implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        System.out.println(sensorEvent.values[0]);
+        //sensorData = makeJsonObject(sensorEvent);
+        mSocket.emit("sensor_data_for_server", sensorEvent.values[0]);
     }
 
     @Override

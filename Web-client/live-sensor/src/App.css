@@ -13,3 +13,13 @@
   font-size: calc(10px + 2vmin);
   color: black;
 }
+
+.connection_tab_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.connection-tab-items {
+  margin-left: 10px;
+  margin-right: 10px;
+}

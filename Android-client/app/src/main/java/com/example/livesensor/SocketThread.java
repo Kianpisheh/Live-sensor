@@ -13,6 +13,9 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +86,13 @@ public class SocketThread extends Thread implements SensorEventListener {
         return type;
     }
 
+    private String getSensorCode(int sensorType) {
+        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            return ACC_STR;
+        }
+        return ACC_STR;
+    }
+
     private Emitter.Listener onConnection = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
@@ -108,6 +118,23 @@ public class SocketThread extends Thread implements SensorEventListener {
         }
     }
 
+    private JSONObject makeJsonObject(SensorEvent event) {
+        JSONObject data = new JSONObject();
+        JSONObject values = new JSONObject();
+        try {
+            int sensorType = event.sensor.getType();
+            if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+                values.put("x axis", event.values[0]);
+                values.put("y axis", event.values[1]);
+                values.put("z axis", event.values[2]);
+                data.put(getSensorCode(sensorType), values);
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+        return data;
+    }
+
     // the listener for incoming messages
     private Emitter.Listener handleSensorRequest = new Emitter.Listener() {
         @Override
@@ -122,8 +149,8 @@ public class SocketThread extends Thread implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        //sensorData = makeJsonObject(sensorEvent);
-        mSocket.emit("sensor_data_for_server", sensorEvent.values[0]);
+        JSONObject sensorData = makeJsonObject(sensorEvent);
+        mSocket.emit("sensor_data_for_server", sensorData.toString());
     }
 
     @Override

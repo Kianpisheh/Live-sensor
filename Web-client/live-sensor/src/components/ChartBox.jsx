@@ -45,8 +45,11 @@ class ChartBox extends Component {
   }
 
   render() {
-    this.chartData.datasets[0].data = this.props.data;
+    const { buffer, dataEntry } = this.props.drawingRequest;
+    this.chartData.datasets[0].data = buffer[dataEntry];
     this.chartData.labels = this.props.labels;
+
+    console.log(buffer[dataEntry][buffer[dataEntry].length - 1]);
 
     return (
       <div style={{ position: "relative", width: 500, height: 300 }}>

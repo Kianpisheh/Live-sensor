@@ -10,12 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35ff0e6f-73c6-4ba4-a363-d058d9d3799c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Web-client/live-sensor/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Web-client/live-sensor/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Web-client/live-sensor/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../Web-client/live-sensor/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Web-client/live-sensor/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../Web-client/live-sensor/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/livesensor/SocketThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/livesensor/SocketThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Web-client/live-sensor/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../Web-client/live-sensor/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Web-client/live-sensor/src/components/ChartBox.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../../Web-client/live-sensor/src/components/ChartBox.jsx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,10 +57,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/example/livesensor/SocketThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
+            <state relative-caret-position="182">
+              <caret line="128" column="30" selection-start-line="128" selection-start-column="30" selection-end-line="128" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3546#3860#0" expanded="true" />
+                <element signature="e#3859#3860#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -98,8 +96,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-1974" />
     <option name="y" value="-19" />
-    <option name="width" value="999" />
-    <option name="height" value="1002" />
+    <option name="width" value="1114" />
+    <option name="height" value="993" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -107,6 +105,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -118,9 +117,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -218,11 +216,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1974" y="-19" width="999" height="1002" extended-state="0" />
+    <frame x="-1974" y="-19" width="1114" height="993" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.276907" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24720149" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -237,8 +235,8 @@
       <window_info anchor="bottom" id="Terminal" order="4" />
       <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.50214136" side_tool="true" weight="0.25028312" />
       <window_info anchor="bottom" id="Version Control" order="6" />
-      <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.12087912" />
-      <window_info anchor="bottom" id="Android Profiler" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.12208657" />
+      <window_info anchor="bottom" id="Android Profiler" order="8" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" weight="0.3845316" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Gradle" order="2" />
@@ -322,10 +320,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/example/livesensor/SocketThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="125" column="18" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
+        <state relative-caret-position="182">
+          <caret line="128" column="30" selection-start-line="128" selection-start-column="30" selection-end-line="128" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3546#3860#0" expanded="true" />
+            <element signature="e#3859#3860#0" expanded="true" />
           </folding>
         </state>
       </provider>

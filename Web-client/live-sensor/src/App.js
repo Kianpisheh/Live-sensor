@@ -8,14 +8,22 @@ import "./App.css";
 
 import ChartBox from "./components/ChartBox";
 import ConnectionTab from "./components/ConnectionTab";
+import DrawingRequestManager from "./DrawingRequestManager";
 
 class App extends Component {
   constructor() {
     super();
+    const d_length = 500;
+    this.drawingRequestManager = new DrawingRequestManager();
+    let firstDrawingRequest = this.drawingRequestManager.initialize(
+      "acc",
+      ["x axis", "y axis", "z axis"],
+      d_length
+    );
     this.state = {
       address: "100.64.81.146",
       port: 9000,
-      drawingRequests: [{ id: 0, sensor: "acc", dataToDraw: "x axis" }],
+      drawingRequests: [firstDrawingRequest],
       connected: false
     };
 
@@ -28,16 +36,12 @@ class App extends Component {
     this.socket = new socketIOClient();
 
     // graph-related attributes
-    const d_length = 500;
-    this.data = new Array(d_length).fill(0);
-    this.labels = [...this.data.keys()];
+    this.labels = new Array(d_length).fill(1);
     this.newLabel = d_length + 1;
     this.d = 0;
   }
 
   render() {
-    this.data.push(this.d);
-    this.data.shift();
     return (
       <div className="App">
         <header className="App-header">
@@ -51,10 +55,7 @@ class App extends Component {
               key={request.id}
               id={request.id}
               drawingRequest={request}
-              newData={this.d}
-              data={this.data}
               labels={this.labels}
-              idx={this.newLabel}
               onSensorChanged={this.onSensorChanged}
             ></ChartBox>
           ))}
@@ -65,17 +66,19 @@ class App extends Component {
 
   // event handlers
   onSensorChanged(value, chartID, isSensor) {
-    let drawingRequest = this.state.drawingRequests;
-    drawingRequest.forEach(request => {
+    let drawingRequests = this.state.drawingRequests;
+    drawingRequests.forEach(request => {
       if (request.id === chartID) {
         if (isSensor) {
           request.sensor = value;
         } else {
-          request.dataToDraw = value;
+          request.dataEntry = value;
         }
+        console.log(request);
       }
     });
-    this.setState({ drawingRequest });
+    console.log(drawingRequests);
+    this.setState({ drawingRequests });
   }
 
   onAddressChanged(value, isAddress) {
@@ -93,22 +96,15 @@ class App extends Component {
         "http://" + address + ":" + port + "/web-app"
       );
 
-      // var socketThread = new WebWorker(SocketThread);
-      // socketThread.postMessage({
-      //   socket: this.socket
-      // });
-
-      // socketThread.onmessage = e => {
-      //   console.log("asjhgkahjs");
-      // };
-
-      // //Listen for data on the "outgoing data" namespace and supply a '
-      // //callback for what to do when we get one. In this case, we set a state variable
+      // listen for the data coming from the server
       this.socket.on("sensor_data_for_web_client", data => {
-        this.d = data;
         this.newLabel += 1;
         if (this.newLabel % 8 === 0) {
-          this.forceUpdate();
+          let updatedRequests = this.drawingRequestManager.updateBuffer(
+            this.state.drawingRequests,
+            data
+          );
+          this.setState({ drawingRequests: updatedRequests });
         }
       });
 

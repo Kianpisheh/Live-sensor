@@ -19,17 +19,13 @@ class DrawingRequestManager {
 
   updateBuffer(currentRequests, data) {
     let updatedRequests = [];
-    let sensorName = data["sensor"];
+    let sensorName = Object.keys(data)[0];
     currentRequests.forEach(request => {
-      console.log(data);
       if (request.sensor === sensorName) {
-        Object.keys(data).forEach(dataEntry => {
-          if (dataEntry !== "sensor") {
-            if (dataEntry in request.buffer) {
-              console.log("push");
-              request.buffer[dataEntry].push(data[sensorName][dataEntry]);
-              request.buffer[dataEntry].shift();
-            }
+        Object.keys(data[sensorName]).forEach(dataEntry => {
+          if (dataEntry in request.buffer) {
+            request.buffer[dataEntry].push(data[sensorName][dataEntry]);
+            request.buffer[dataEntry].shift();
           }
         });
       }

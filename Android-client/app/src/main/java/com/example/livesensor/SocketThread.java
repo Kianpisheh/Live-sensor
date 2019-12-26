@@ -59,14 +59,14 @@ public class SocketThread extends Thread implements SensorEventListener {
 
         mSocket.on(Socket.EVENT_CONNECT, onConnection);
         mSocket.on(Socket.EVENT_DISCONNECT, onConnection);
-        mSocket.on("sensor request", handleSensorRequest);
+        mSocket.on("sensor_request_server_android", handleSensorRequest);
     }
 
     public void stopThread() {
         if (mSocket != null) {
             mSocket.disconnect();
             System.out.println("disconnected");
-            mSocket.off("sensor request", handleSensorRequest);
+            mSocket.off("sensor_request_server_android", handleSensorRequest);
         }
 
         SensorManager sensorManager =
@@ -103,27 +103,53 @@ public class SocketThread extends Thread implements SensorEventListener {
         }
     };
 
-    private void updateSensorService(String requestedSensor) {
-        // register newly subscribed sensors
+    private void updateSensorService(JSONObject sensorRequests) {
         SensorManager sensorManager =
                 (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (!sensorsList.contains(requestedSensor)) {
-            int type = getSensorType(requestedSensor);
-            if (sensorManager != null) {
-                Sensor sensor = sensorManager.getDefaultSensor(type);
-                sensorManager.registerListener(this, sensor,
-                        SensorManager.SENSOR_DELAY_FASTEST);
-                sensorsList.add(requestedSensor);
+
+        List<String> requestList = new ArrayList<>();
+        for (int i = 0; i < sensorRequests.length(); i++) {
+            try {
+                requestList.add((String) sensorRequests.get(String.valueOf(i)));
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // register newly subscribed sensors
+        for (String qSensor : requestList) {
+            if (!sensorsList.contains(qSensor)) {
+                int type = getSensorType(qSensor);
+                if (sensorManager != null) {
+                    Sensor sensor = sensorManager.getDefaultSensor(type);
+                    sensorManager.registerListener(this, sensor,
+                            SensorManager.SENSOR_DELAY_FASTEST);
+                    sensorsList.add(qSensor);
+                }
+            }
+        }
+
+        // unregister unsubscribed sensors
+        for (String sensorItem: sensorsList) {
+            if (!requestList.contains(sensorItem)) {
+                int type = getSensorType(sensorItem);
+                if (sensorManager != null) {
+                    Sensor sensor = sensorManager.getDefaultSensor(type);
+                    sensorManager.unregisterListener(this, sensor);
+                    sensorsList.remove(sensorItem);
+                }
             }
         }
     }
+
 
     private JSONObject makeJsonObject(SensorEvent event) {
         JSONObject data = new JSONObject();
         JSONObject values = new JSONObject();
         try {
             int sensorType = event.sensor.getType();
-            if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            if ((sensorType == Sensor.TYPE_ACCELEROMETER) ||
+                    (sensorType == Sensor.TYPE_GYROSCOPE)) {
                 values.put("x axis", event.values[0]);
                 values.put("y axis", event.values[1]);
                 values.put("z axis", event.values[2]);
@@ -139,18 +165,24 @@ public class SocketThread extends Thread implements SensorEventListener {
     private Emitter.Listener handleSensorRequest = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            String requestedSensor = (String) args[0];
-            String request = (String) args[1];
-            if (request.equals("start")) {
-                updateSensorService(requestedSensor);
+            JSONObject sensorRequests = null;
+            try {
+                sensorRequests = new JSONObject((String) args[0]);
+            } catch (JSONException err){
+                Log.d("Error", err.toString());
             }
+            if (sensorRequests == null) {
+                return;
+            }
+            updateSensorService(sensorRequests);
+
         }
     };
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         JSONObject sensorData = makeJsonObject(sensorEvent);
-        mSocket.emit("sensor_data_for_server", sensorData.toString());
+        mSocket.emit("sensor_data_android_server", sensorData.toString());
     }
 
     @Override

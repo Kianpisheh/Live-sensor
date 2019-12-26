@@ -31,6 +31,7 @@ class App extends Component {
     this.onSensorChanged = this.onSensorChanged.bind(this);
     this.onAddressChanged = this.onAddressChanged.bind(this);
     this.onConnectBtnClicked = this.onConnectBtnClicked.bind(this);
+    this.getRequestMessage = this.getRequestMessage.bind(this);
 
     this.socketThread = new WebWorker(SocketThread);
     this.socket = new socketIOClient();
@@ -74,10 +75,14 @@ class App extends Component {
         } else {
           request.dataEntry = value;
         }
-        console.log(request);
       }
     });
     console.log(drawingRequests);
+    // update and send the request to the server
+    const requestMessage = this.getRequestMessage(drawingRequests);
+    if (this.state.connected) {
+      this.socket.emit("sensor_request_web_server", requestMessage);
+    }
     this.setState({ drawingRequests });
   }
 
@@ -97,7 +102,7 @@ class App extends Component {
       );
 
       // listen for the data coming from the server
-      this.socket.on("sensor_data_for_web_client", data => {
+      this.socket.on("sensor_data_server_web_client", data => {
         this.newLabel += 1;
         if (this.newLabel % 8 === 0) {
           let updatedRequests = this.drawingRequestManager.updateBuffer(
@@ -111,6 +116,10 @@ class App extends Component {
       this.socket.on("connect", () => {
         this.setState({ connected: true });
         console.log("connected");
+        const requestMessage = this.getRequestMessage(
+          this.state.drawingRequests
+        );
+        this.socket.emit("sensor_request_web_server", requestMessage);
       });
 
       this.socket.on("disconnect", () => {
@@ -119,6 +128,14 @@ class App extends Component {
     } else {
       this.socket.disconnect();
     }
+  }
+
+  getRequestMessage(drawingRequests) {
+    let sensors = [];
+    drawingRequests.forEach(request => {
+      sensors.push(request.sensor);
+    });
+    return sensors;
   }
 }
 

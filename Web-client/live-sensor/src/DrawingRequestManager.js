@@ -21,11 +21,13 @@ class DrawingRequestManager {
     let updatedRequests = [];
     let sensorName = data["sensor"];
     currentRequests.forEach(request => {
+      console.log(data);
       if (request.sensor === sensorName) {
         Object.keys(data).forEach(dataEntry => {
           if (dataEntry !== "sensor") {
             if (dataEntry in request.buffer) {
-              request.buffer[dataEntry].push(data[dataEntry]);
+              console.log("push");
+              request.buffer[dataEntry].push(data[sensorName][dataEntry]);
               request.buffer[dataEntry].shift();
             }
           }

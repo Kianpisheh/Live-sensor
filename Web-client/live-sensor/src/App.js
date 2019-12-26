@@ -104,6 +104,9 @@ class App extends Component {
       // listen for the data coming from the server
       this.socket.on("sensor_data_server_web_client", data => {
         this.newLabel += 1;
+        if (this.newLabel % 50 === 0) {
+          //console.log(this.newLabel);
+        }
         if (this.newLabel % 8 === 0) {
           let updatedRequests = this.drawingRequestManager.updateBuffer(
             this.state.drawingRequests,

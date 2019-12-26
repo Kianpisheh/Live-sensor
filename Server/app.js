@@ -21,6 +21,10 @@ android_nsp.on("connection", socket => {
 
   //Here we listen on a new namespace called "incoming data"
   socket.on("sensor_data_android_server", data => {
+    num += 1;
+    if (num % 1000 === 0) {
+      console.log(num);
+    }
     if (clients["web"]) {
       clients["web"].emit("sensor_data_server_web_client", JSON.parse(data));
     }

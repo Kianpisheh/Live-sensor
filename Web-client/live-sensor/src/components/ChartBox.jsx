@@ -46,7 +46,6 @@ class ChartBox extends Component {
 
   render() {
     const { buffer, dataEntry } = this.props.drawingRequest;
-    console.log(dataEntry);
     this.chartData.datasets[0].data = buffer[dataEntry];
     this.chartData.labels = this.props.labels;
 

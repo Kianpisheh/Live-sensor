@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     // layout elements
     private TextInputEditText portTextEdit, ipTextEdit;
-    private MaterialButton connectButton;
     private TextView connectionStatus;
     private SwitchMaterial connectionSwitch;
 

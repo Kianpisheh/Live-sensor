@@ -38,7 +38,7 @@ class App extends Component {
 
     // graph-related attributes
     this.labels = new Array(d_length).fill(1);
-    this.newLabel = d_length + 1;
+    this.newLabel = 1;
     this.d = 0;
   }
 
@@ -58,6 +58,7 @@ class App extends Component {
               drawingRequest={request}
               labels={this.labels}
               onSensorChanged={this.onSensorChanged}
+              sampleNum={this.newLabel}
             ></ChartBox>
           ))}
         </header>

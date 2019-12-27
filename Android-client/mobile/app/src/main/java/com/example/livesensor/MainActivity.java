@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -26,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SocketThread socketThread;
     private MainHandler mainHandler = new MainHandler();
-
 
     // layout elements
     private TextInputEditText portTextEdit, ipTextEdit;

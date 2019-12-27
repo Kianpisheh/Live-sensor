@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 //import Select from "@material-ui/core/Select";
+import LineChart from "./LineChart";
 
 import { Line } from "react-chartjs-2";
 
@@ -49,6 +50,11 @@ class ChartBox extends Component {
     this.chartData.datasets[0].data = buffer[dataEntry];
     this.chartData.labels = this.props.labels;
 
+    // this is the input for the canvas version
+    const sensorValue = buffer[dataEntry][buffer[dataEntry].length - 1];
+    const sampleNum = this.props.sampleNum;
+    const data = { value: sensorValue, timestamp: sampleNum };
+
     return (
       <div style={{ position: "relative", width: 500, height: 300 }}>
         <DataSelector
@@ -57,20 +63,21 @@ class ChartBox extends Component {
           id={this.props.id}
           drawingRequest={this.props.drawingRequest}
         ></DataSelector>
-        <Line
+        {/* <Line
           key={"line_chart_" + this.props.id}
           id={this.props.id}
           ref={reference => (this.chartReference = reference)}
           data={this.chartData}
           options={this.lineOptions}
-        ></Line>
+        ></Line> */}
+        <LineChart data={data}></LineChart>
       </div>
     );
   }
 
   componentDidUpdate() {
-    let lineChart = this.chartReference.chartInstance;
-    lineChart.update();
+    // let lineChart = this.chartReference.chartInstance;
+    // lineChart.update();
   }
 
   componentDidMount() {

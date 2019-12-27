@@ -28,6 +28,7 @@ public class SocketThread extends Thread implements SensorEventListener {
 
     private String ACC_STR = "acc";
     private String GYRO_STR = "gyro";
+    private String GRAVITY_STR= "grav";
 
     private boolean settled = true;
 
@@ -87,6 +88,8 @@ public class SocketThread extends Thread implements SensorEventListener {
             return Sensor.TYPE_ACCELEROMETER;
         } else if (sensor.equals(GYRO_STR)) {
             return Sensor.TYPE_GYROSCOPE;
+        } else if (sensor.equals(GRAVITY_STR)) {
+            return Sensor.TYPE_GRAVITY;
         }
         return type;
     }
@@ -96,8 +99,11 @@ public class SocketThread extends Thread implements SensorEventListener {
             return ACC_STR;
         } else if (sensorType == Sensor.TYPE_GYROSCOPE) {
             return GYRO_STR;
+        } else if (sensorType == Sensor.TYPE_GRAVITY) {
+            return GRAVITY_STR;
+        } else {
+            return "";
         }
-        return ACC_STR;
     }
 
     private Emitter.Listener onConnection = new Emitter.Listener() {
@@ -132,10 +138,14 @@ public class SocketThread extends Thread implements SensorEventListener {
                 int type = getSensorType(qSensor);
                 if (sensorManager != null) {
                     Sensor sensor = sensorManager.getDefaultSensor(type);
-                    System.out.println("subscribe " + sensor.getName());
-                    sensorManager.registerListener(this, sensor,
-                            SensorManager.SENSOR_DELAY_FASTEST);
-                    sensorsList.add(qSensor);
+                    if (sensor != null) {
+                        System.out.println("subscribe " + sensor.getName());
+                        sensorManager.registerListener(this, sensor,
+                                SensorManager.SENSOR_DELAY_FASTEST);
+                        sensorsList.add(qSensor);
+                    } else {
+                        Log.e(TAG, "updateSensorService: sensor is null for" + qSensor);
+                    }
                 }
             }
         }

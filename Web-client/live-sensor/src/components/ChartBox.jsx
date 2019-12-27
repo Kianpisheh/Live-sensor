@@ -2,8 +2,6 @@ import React, { Component } from "react";
 //import Select from "@material-ui/core/Select";
 import LineChart from "./LineChart";
 
-import { Line } from "react-chartjs-2";
-
 class ChartBox extends Component {
   chartReference = {};
 
@@ -73,7 +71,12 @@ export default ChartBox;
 
 function DataSelector(props) {
   const dataToDraw = ["x axis", "y axis", "z axis"];
-  const sensors = { acc: dataToDraw, gyro: dataToDraw, rot: dataToDraw };
+  const sensors = {
+    acc: dataToDraw,
+    gyro: dataToDraw,
+    rot: dataToDraw,
+    grav: dataToDraw
+  };
   const { id, drawingRequest } = props;
 
   return (

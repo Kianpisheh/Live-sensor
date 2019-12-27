@@ -63,25 +63,9 @@ class ChartBox extends Component {
           id={this.props.id}
           drawingRequest={this.props.drawingRequest}
         ></DataSelector>
-        {/* <Line
-          key={"line_chart_" + this.props.id}
-          id={this.props.id}
-          ref={reference => (this.chartReference = reference)}
-          data={this.chartData}
-          options={this.lineOptions}
-        ></Line> */}
         <LineChart data={data}></LineChart>
       </div>
     );
-  }
-
-  componentDidUpdate() {
-    // let lineChart = this.chartReference.chartInstance;
-    // lineChart.update();
-  }
-
-  componentDidMount() {
-    console.log(this.chartReference); // returns a Chart.js instance reference
   }
 }
 

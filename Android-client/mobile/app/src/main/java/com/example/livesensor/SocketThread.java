@@ -27,6 +27,9 @@ public class SocketThread extends Thread implements SensorEventListener {
     public static final int CONN_STATUS_CHANGED = 1;
 
     private String ACC_STR = "acc";
+    private String GYRO_STR = "gyro";
+
+    private boolean settled = true;
 
 
     private List<String> sensorsList = new ArrayList<>();
@@ -82,6 +85,8 @@ public class SocketThread extends Thread implements SensorEventListener {
         int type = -300;
         if (sensor.equals(ACC_STR)) {
             return Sensor.TYPE_ACCELEROMETER;
+        } else if (sensor.equals(GYRO_STR)) {
+            return Sensor.TYPE_GYROSCOPE;
         }
         return type;
     }
@@ -89,6 +94,8 @@ public class SocketThread extends Thread implements SensorEventListener {
     private String getSensorCode(int sensorType) {
         if (sensorType == Sensor.TYPE_ACCELEROMETER) {
             return ACC_STR;
+        } else if (sensorType == Sensor.TYPE_GYROSCOPE) {
+            return GYRO_STR;
         }
         return ACC_STR;
     }
@@ -104,9 +111,12 @@ public class SocketThread extends Thread implements SensorEventListener {
     };
 
     private void updateSensorService(JSONObject sensorRequests) {
+        settled = false;
         SensorManager sensorManager =
                 (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
+
+        System.out.println(sensorRequests);
         List<String> requestList = new ArrayList<>();
         for (int i = 0; i < sensorRequests.length(); i++) {
             try {
@@ -122,6 +132,7 @@ public class SocketThread extends Thread implements SensorEventListener {
                 int type = getSensorType(qSensor);
                 if (sensorManager != null) {
                     Sensor sensor = sensorManager.getDefaultSensor(type);
+                    System.out.println("subscribe " + sensor.getName());
                     sensorManager.registerListener(this, sensor,
                             SensorManager.SENSOR_DELAY_FASTEST);
                     sensorsList.add(qSensor);
@@ -130,16 +141,24 @@ public class SocketThread extends Thread implements SensorEventListener {
         }
 
         // unregister unsubscribed sensors
+        List<String> newSensorList = new ArrayList<>();
+        newSensorList.addAll(sensorsList);
         for (String sensorItem: sensorsList) {
             if (!requestList.contains(sensorItem)) {
                 int type = getSensorType(sensorItem);
                 if (sensorManager != null) {
                     Sensor sensor = sensorManager.getDefaultSensor(type);
+                    System.out.println("unsubscribe " + sensor.getName());
                     sensorManager.unregisterListener(this, sensor);
-                    sensorsList.remove(sensorItem);
+                    newSensorList.remove(sensorItem);
                 }
             }
         }
+
+        sensorsList = new ArrayList<>();
+        sensorsList = newSensorList;
+        settled = true;
+
     }
 
 
@@ -181,8 +200,10 @@ public class SocketThread extends Thread implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        JSONObject sensorData = makeJsonObject(sensorEvent);
-        mSocket.emit("sensor_data_android_server", sensorData.toString());
+        if (settled) {
+            JSONObject sensorData = makeJsonObject(sensorEvent);
+            mSocket.emit("sensor_data_android_server", sensorData.toString());
+        }
     }
 
     @Override
